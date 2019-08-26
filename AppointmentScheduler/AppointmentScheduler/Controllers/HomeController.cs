@@ -14,6 +14,7 @@ namespace AppointmentScheduler.Controllers
 
         public ActionResult Index()
         {
+            // return view
             return View();
 
         }
