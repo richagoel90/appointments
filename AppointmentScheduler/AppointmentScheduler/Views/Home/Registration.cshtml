@@ -1,0 +1,62 @@
+﻿@using System.Web.Helpers
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model AppointmentScheduler.Models.Users
+
+<h2>@ViewBag.Message</h2>
+<div>
+    @using (Html.BeginForm("Registration", "Home", FormMethod.Post))
+    {
+    <table>
+        <tr>
+            <td>@Html.Label("First Name:")</td>
+            <td>
+                @Html.TextBoxFor(m => m.FirstName)
+                @Html.ValidationMessage("FirstName", new { @class="btn-danger"})
+            </td>
+
+        </tr>
+        <tr>
+            <td>@Html.Label("Last Name:")</td>
+            <td>
+                @Html.TextBoxFor(m => m.LastName)
+                @Html.ValidationMessage("LastName", new { @class="btn-danger"})
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.Label("Email ID:")</td>
+            <td>
+                @Html.TextBoxFor(m => m.EmailID)
+                @Html.ValidationMessage("EmailID", new { @class="btn-danger"})
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.Label("Phone Number:")</td>
+            <td>
+                @Html.TextBox("PhoneNumber")
+                <!-- @Html.ValidationMessage("PhoneNumber", new { @class="btn-danger"})-->
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.Label("User Name:")</td>
+            <td>
+                @Html.TextBoxFor(m => m.UserName)
+                @Html.ValidationMessage("UserName", new { @class="btn-danger"})
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.Label("Password")</td>
+            <td>
+                @Html.PasswordFor(m => m.Password)
+            </td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Register" /></td>
+        </tr>
+    </table>
+    }
+
+</div>
+    

@@ -1,0 +1,32 @@
+﻿@model AppointmentScheduler.Models.Users
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@ViewBag.Message</h2>
+
+<div>
+    @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+    {
+        <table>
+            <tr>
+                <td>@Html.Label("User Name")</td>
+                <td>
+                    @Html.TextBoxFor(m => m.UserName)
+                    @Html.ValidationMessage("UserName", new { @class = "btn-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.Label("Password")</td>
+                <td>@Html.Password("Password")</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="Login" />
+                </td>
+            </tr>
+        </table>
+        @Html.ActionLink("Forget Password", "Forget", "Home")
+    }
+</div>
+

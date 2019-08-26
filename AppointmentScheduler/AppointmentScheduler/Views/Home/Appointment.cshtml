@@ -1,0 +1,36 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <form id="form1" runat="server">
+        <h1>APPOINTMENTS</h1>
+        <table width="100%" height="500px">
+            <tr>
+                <td valign="top">
+                    <h3>About Appointments Application</h3>
+                    Appointments application allows you to schedule your appointments and store
+                    your appointments in web so that you can access it from anywhere.
+
+                    <p />
+                    It provides the following functionality :
+                    <ul>
+                        <li>Adding appointments</li>
+                        <li>Searching your appointments</li>
+                        <li>Edit and delete your appointments</li>
+                        <li>Get appointments by date</li>
+                        <li>Provides notification facility to remind you about your appointments</li>
+                    </ul>
+
+                    In order to use this application, you must register as a user.
+                    <p />
+                    Click @Html.ActionLink("here to register.", "Registration","home")
+
+                </td>
+                <td valign="top" width="30%" style="background-color:white">
+                    <h3>
+                        @Html.ActionLink("Login", "Login", "home")
+                    </h3>
+                </td>
+            </tr>
+        </table>
+    </form>
+

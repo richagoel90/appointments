@@ -1,0 +1,23 @@
+﻿@using AppointmentScheduler.Controllers
+@model AppointmentScheduler.Controllers.AllUsers
+@{
+    ViewBag.Title = "AllUsers";
+}
+
+<h2>AllUsers</h2>
+
+<table border="1">
+    <tr>
+        <td>UserId</td>
+        <td>User Name</td>
+        <td>First Name</td>
+    </tr>
+    @foreach(UserData user in Model.Users)
+    {
+        <tr>
+            <td>@user.UserName</td>
+            <td>@user.FirstName</td>
+        </tr>
+    }
+</table>
+
