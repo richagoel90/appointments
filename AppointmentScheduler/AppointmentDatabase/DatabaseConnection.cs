@@ -5,18 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
-
 namespace AppointmentDatabase
-{   public class DatabaseConnection : Connection
+{
+    public class DatabaseConnection : Connection
     {
-        int result=0;
         public DbUsers UserLogin(DbUsers user)
         {
             using (SqlCommand cmd1 = new SqlCommand("LOGIN_USER", mConnection))
             {
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.Add(new SqlParameter("@USERNAME", user.UserName));
-                cmd1.Parameters.Add(new SqlParameter("@PASSWORD", user.Password));
+                //cmd1.Parameters.Add(new SqlParameter("@PASSWORD", user.Password));
                 using (SqlDataReader reader = cmd1.ExecuteReader())
                 {
 
@@ -26,6 +25,7 @@ namespace AppointmentDatabase
                         user.LastName = (string)reader["LastName"];
                         user.EmailID = (string)reader["EmailID"];
                         user.PhoneNumber = (long)reader["PhoneNumber"];
+                        user.Password = (string)reader["Password"];
                         return user;
                     }
                 }
@@ -33,19 +33,20 @@ namespace AppointmentDatabase
             }
             return user;
         }
-        public int UserRegistration(DbUsers user)
+        public ReturnCode.result UserRegistration(DbUsers user)
         {
             using (SqlCommand cmd1 = new SqlCommand("VALIDATE_USER", mConnection))
             {
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.Add(new SqlParameter("@EMAILID", user.EmailID));
+                cmd1.Parameters.Add(new SqlParameter("@USERNAME", user.UserName));
                 using (SqlDataReader reader = cmd1.ExecuteReader())
                 {
                     if (reader.HasRows)
                     {
-                        return 400;
+                        return ReturnCode.result.userexist;
                     }
-       
+
                 }
             }
             //string column = "(UserName, Password, FirstName, LastName, EmailID, PhoneNumber)";
@@ -56,17 +57,39 @@ namespace AppointmentDatabase
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@USERNAME", user.UserName));
                 cmd.Parameters.Add(new SqlParameter("@PASSWORD", user.Password));
-                cmd.Parameters.Add(new SqlParameter("@FIRSTNAME",user.FirstName));
+                cmd.Parameters.Add(new SqlParameter("@FIRSTNAME", user.FirstName));
                 cmd.Parameters.Add(new SqlParameter("@LASTNAME", user.LastName));
                 cmd.Parameters.Add(new SqlParameter("@EMAILID", user.EmailID));
                 cmd.Parameters.Add(new SqlParameter("@PHONENUMBER", user.PhoneNumber));
-                result = cmd.ExecuteNonQuery();
-                if (result == 0)
+                int out1 = cmd.ExecuteNonQuery();
+                if (out1 == 1)
                 {
-                    return -1;
+                    return ReturnCode.result.success;                   
+                }
+                else
+                {
+                    return ReturnCode.result.fail;
                 }
             }
-            return result;
+        }
+        public ReturnCode.result changePassword(DbUsers user)
+        {
+            using(SqlCommand cmd=new SqlCommand("CHANGE_PASSWORD", mConnection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@USERNAME", user.UserName));
+                cmd.Parameters.Add(new SqlParameter("@PASSWORD", user.Password));
+                int out1 = cmd.ExecuteNonQuery();
+                if (out1==1)
+                {
+                    return ReturnCode.result.success;
+                }
+                else
+                {
+                    return ReturnCode.result.fail;
+                }
+
+            }
         }
     }
 }

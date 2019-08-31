@@ -6,7 +6,7 @@ using System.Web;
 
 namespace AppointmentScheduler.Models
 {
-    public class Users
+    public class UserInfo
     {
         [Required]
         public string FirstName { get; set; }

@@ -1,31 +1,17 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "My Account";
 }
-@model AppointmentScheduler.Models.Users
-    <table border="1">
-        <tr>
-            <td>First Name:</td>
-            <td>@Model.FirstName</td>
-        </tr>
-        <tr>
-            <td>Last Name:</td>
-            <td>@Model.LastName</td>
-        </tr>
-        <tr>
-            <td>EmailID:</td>
-            <td>@Model.EmailID</td>
-        </tr>
-        <tr>
-            <td>Phone Number:</td>
-            <td>@Model.PhoneNumber</td>
-        </tr>
-    </table>
+<link rel="stylesheet" type="text/css" href="~/Content/Main.css">
+@using AppointmentScheduler.Models
+@model AppointmentScheduler.Models.UserInfo
+<h1>@ViewBag.Title</h1>
 
+<span class="tablestyle">
+        <button>@Html.ActionLink("Today", "CurrentAppointment", "Home")</button>
+        <button>@Html.ActionLink("Request Appointment", "RequestAppointment", "Home")</button>
+        <button>@Html.ActionLink("Request Status", "RequestStatus", "Home")</button>
+        <button>@Html.ActionLink("View Calender", "Calender", "Home")</button>
+</span>
 
-<table>
-    <tr>
-        <td></td>
-    </tr>
-</table>
-
-
+ 

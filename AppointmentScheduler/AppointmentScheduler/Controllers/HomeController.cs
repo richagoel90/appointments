@@ -6,51 +6,43 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using AppointmentDatabase;
-
+using AppointmentScheduler.Models;
 namespace AppointmentScheduler.Controllers
 {
+    [HandleError]
     public class HomeController : Controller
-    {
-
+    {       
+        [HttpGet]
         public ActionResult Index()
         {
-            // return view
-            return View();
-
-        }
-        public ActionResult About()
-        {
-            return View();
-        }
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-        public ActionResult Appointment()
-        {
+            UserInfo user = GetLoggedInUser();
+            if (user != null)
+            {
+                return RedirectToAction("UserAccount");
+            }
             ViewBag.Message = "Your Appointment page.";
-
             return View();
         }
+
+        [HttpGet]
         public ActionResult Registration()
         {
+            UserInfo user = GetLoggedInUser();
+            if (user != null)
+            {
+                return RedirectToAction("UserAccount");
+            }
             ViewBag.Message = "Your Registration page.";
-
-            return View();
-        }
-        public ActionResult Login()
-        {
             return View();
         }
 
         [HttpPost]
-        public ActionResult Registration(Models.Users user)
+        public ActionResult Registration(UserInfo user)
         {
-            var hash = Crypto.HashPassword(user.Password);
             if (ModelState.IsValid)
             {
+                var hash = Crypto.HashPassword(user.Password);
+
                 DbUsers dbuser = new DbUsers();
                 dbuser.FirstName = user.FirstName;
                 dbuser.LastName = user.LastName;
@@ -62,59 +54,153 @@ namespace AppointmentScheduler.Controllers
 
                 DatabaseConnection dbconnect = new DatabaseConnection();
 
-                int result = dbconnect.UserRegistration(dbuser);
+                ReturnCode.result result = dbconnect.UserRegistration(dbuser);
+                
 
-                if (result == -1)
+                if (result.Equals(ReturnCode.result.fail))
                 {
-                    ViewBag.Message = "Registration not Successful.Please try later";
+                    ModelState.AddModelError("CustomError", "Registration not Successful.Please try later");                    
                     return View();
                 }
-                else if (result == 400)
+                else if (result.Equals(ReturnCode.result.userexist))
                 {
-                    ViewBag.Message = "EmailID already exist";
+                    ModelState.AddModelError("CustomError","EmailID/UserName already exist");
                     return View();
                 }
-                else
+                else if(result.Equals(ReturnCode.result.success))
                 {
-                    ViewBag.Message = "Registration Successful.Please login";
-                    return View("Login");
+                    ViewBag.Message = "Registration successful.Please login";
+                    return RedirectToAction("Login");
                 }
-
-
             }
             return View(user);
         }
 
-        [HttpPost]
-        public ActionResult Login(Models.Users user)
+        [HttpGet]
+        public ActionResult Login()
         {
-            if (ModelState.IsValid)
+            UserInfo user = GetLoggedInUser();
+            if (user != null)
             {
-                DbUsers dbuser = new DbUsers();
-                dbuser.UserName = user.UserName;
-                dbuser.Password = user.Password;
+                return RedirectToAction("UserAccount");
+            }
+            return View();
+        }
 
+        [HttpPost]
+        public ActionResult Login(LoggedinInfo user)
+        {
+            DbUsers dbuser = new DbUsers();
+            dbuser.UserName = user.UserName;
+            if(ModelState.IsValid)
+            {
+                bool output = false;
                 DatabaseConnection dbconnect = new DatabaseConnection();
-                DbUsers result = dbconnect.UserLogin(dbuser);
-
-                if (String.IsNullOrEmpty(result.FirstName))
+                DbUsers resultuser = dbconnect.UserLogin(dbuser);
+                try
                 {
-                    ViewBag.Message = "Incorrect Username and password";
-                    return View();
+                    output = Crypto.VerifyHashedPassword(resultuser.Password, user.Password);
+                }
+                catch(Exception e)
+                {
+                    output = false;
+                }
+                if (output)
+                {
+                    UserInfo userModel = new UserInfo()
+                    {
+                        FirstName = resultuser.FirstName,
+                        LastName = resultuser.LastName,
+                        EmailID = resultuser.EmailID,
+                        PhoneNumber = resultuser.PhoneNumber,
+                        UserName = resultuser.UserName,
+                        Password = resultuser.Password
+                    };
+
+                    ////HttpCookie cookie = new HttpCookie("Login");
+                    //cookie["UserName"] = user.UserName;
+                    //cookie["FirstName"] = user.FirstName;
+                    //cookie.Expires.Add(new TimeSpan(1, 0, 0));
+                    //Response.Cookies.Add(cookie);
+                    Session["User"] = userModel;
+                    return RedirectToAction("UserAccount");
                 }
                 else
                 {
-                    user.FirstName = result.FirstName;
-                    user.LastName = result.LastName;
-                    user.EmailID = result.EmailID;
-                    user.PhoneNumber = result.PhoneNumber;
-                    return View("UserAccount", user);
+                    ModelState.AddModelError("CustomError", "Incorrect Username and password");
+                    return View();
                 }
+            }
+            return View();
+            
+        }
 
+        [HttpGet]
+        public ActionResult UserAccount()
+        {
+            UserInfo user = GetLoggedInUser();
+            if (user != null)
+            {
+                return View(user);
             }
             else
-                return View();
+            {
+                return RedirectToAction("Index");
+            }            
+        }  
+        [HttpGet]
+        public ActionResult ForgetPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult ForgetPassword(LoggedinInfo user)
+        {
+            var hash = Crypto.HashPassword(user.Password);
+            DbUsers dbuser = new DbUsers();
+            dbuser.UserName = user.UserName;
+            dbuser.Password = hash;
+            if (ModelState.IsValid)
+            {
+                DatabaseConnection dbconnect = new DatabaseConnection();
+                ReturnCode.result result = dbconnect.changePassword(dbuser);
+                if (result.Equals(ReturnCode.result.success))
+                {
+                    TempData["Message"] = "Password has been changed.Please Login";
+                    return RedirectToAction("Login");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty,"Password has not been changed");
+                    return View();
+                }
+            }
+            return View();
+        }
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            Session.Remove("User");
+            return RedirectToAction("Index");
+        }
 
+        [HttpGet]
+        public ActionResult RequestAppointment()
+        {
+            UserInfo user = GetLoggedInUser();
+            if (user != null)
+            {
+                return View(user);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+        private UserInfo GetLoggedInUser()
+        {
+            return Session["User"] as UserInfo;
         }
     }
 }

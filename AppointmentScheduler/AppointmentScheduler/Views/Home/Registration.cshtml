@@ -2,13 +2,15 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    @ViewBag.Title= "Registration";
 }
-@model AppointmentScheduler.Models.Users
-
+@model AppointmentScheduler.Models.UserInfo
+<h1>@ViewBag.Title</h1>
 <h2>@ViewBag.Message</h2>
 <div>
     @using (Html.BeginForm("Registration", "Home", FormMethod.Post))
     {
+        @Html.ValidationMessage("CustomError", new { @class = "btn-danger" });
     <table>
         <tr>
             <td>@Html.Label("First Name:")</td>
@@ -50,6 +52,7 @@
             <td>@Html.Label("Password")</td>
             <td>
                 @Html.PasswordFor(m => m.Password)
+                @Html.ValidationMessage("Password", new { @class = "btn-danger" });
             </td>
         </tr>
         <tr>

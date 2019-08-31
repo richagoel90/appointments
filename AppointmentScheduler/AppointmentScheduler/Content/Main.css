@@ -3,3 +3,14 @@
     font-size:8px;
     font:bold;
 }
+.tablestyle {
+    border:thick;
+    padding: 50px
+}
+.tablestyle button {
+    border-color: black;
+    border: thick;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
