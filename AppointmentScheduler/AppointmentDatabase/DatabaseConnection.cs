@@ -91,5 +91,23 @@ namespace AppointmentDatabase
 
             }
         }
+        public List<String> getGuestUsersList(String HostUserName)
+        {
+            List<string> UserList = new List<string>();
+            using (SqlCommand cmd=new SqlCommand("GUEST_USERLIST", mConnection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("USERNAME", HostUserName));
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {    
+                    while (reader.Read())
+                    {
+                        UserList.Add((string)reader[0]);
+                    }
+                }
+                    
+            }
+            return UserList;
+        }
     }
 }

@@ -1,0 +1,17 @@
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:25:16 PM] Emulator config file set to D:\Richa Documents\GitHubRepos\appointments\AppointmentScheduler\AppintmentsAzure\csx\Debug\roles\AppointmentScheduler\approot\diagnostics.wadcfgx
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:25:16 PM] DiagnosticsStoreRootPath set to: C:\Users\richa\AppData\Local\dftmp\Resources\445ff92c-3243-4ef0-9071-eba80d752d0f
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:25:16 PM] Loading config file: D:\Richa Documents\GitHubRepos\appointments\AppointmentScheduler\AppintmentsAzure\csx\Debug\roles\AppointmentScheduler\approot\diagnostics.wadcfgx
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:25:16 PM] Config file to read: D:\Richa Documents\GitHubRepos\appointments\AppointmentScheduler\AppintmentsAzure\csx\Debug\roles\AppointmentScheduler\approot\diagnostics.wadcfgx
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:25:16 PM] Checking VM Type
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:25:16 PM] Emulator config file set to D:\Richa Documents\GitHubRepos\appointments\AppointmentScheduler\AppintmentsAzure\csx\Debug\roles\AppointmentScheduler\approot\diagnostics.wadcfgx
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:25:16 PM] Extension set to Emulator Mode
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:25:16 PM] Reading XML configuration file
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:25:16 PM] Bypassing private config decryption
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:25:16 PM] Stopping the running plugin, if any
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:25:16 PM] No DiagnosticsPlugin is running.
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:25:16 PM] Killing any DiagnosticsPlugin that might remain.
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:25:16 PM] Killing any MonAgentHost that might remain.
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:25:17 PM] Diagnostics plugin stopped successfully
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:25:17 PM] Resetting DiagnosticPlugin
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:26:27 PM] DiagnosticsPlugin launched successfully with new configuration
+DiagnosticsPluginLauncher.exe Information: 0 : [8/31/2019 10:26:27 PM] DiagnosticPlugin exited with code 0

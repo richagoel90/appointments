@@ -190,6 +190,9 @@ namespace AppointmentScheduler.Controllers
             UserInfo user = GetLoggedInUser();
             if (user != null)
             {
+                List<string> UserList = new List<string>();
+                DatabaseConnection dbConnect = new DatabaseConnection();
+
                 return View(user);
             }
             else

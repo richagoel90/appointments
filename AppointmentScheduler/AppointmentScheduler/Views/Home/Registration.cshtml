@@ -1,13 +1,12 @@
 ﻿@using System.Web.Helpers
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    @ViewBag.Title= "Registration";
+    ViewBag.Title = "Registration";
 }
 @model AppointmentScheduler.Models.UserInfo
 <h1>@ViewBag.Title</h1>
 <h2>@ViewBag.Message</h2>
-<div>
+<div>       
     @using (Html.BeginForm("Registration", "Home", FormMethod.Post))
     {
         @Html.ValidationMessage("CustomError", new { @class = "btn-danger" });
