@@ -200,6 +200,18 @@ namespace AppointmentScheduler.Controllers
                 return RedirectToAction("Index");
             }
         }
+        //[HttpGet]
+        //public ActionResult GoogleOAuth()
+        //{
+        //    GoogleOAuthAPICall gAuth = new GoogleOAuthAPICall();
+        //    gAuth.code = Request.QueryString["code"];
+        //    return V);
+        //}
+        //[HttpPost]
+        //public ActionResult GoogleOAuth()
+        //{
+        //    return RedirectToAction("Login");
+        //}
 
         private UserInfo GetLoggedInUser()
         {
