@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
+
 namespace AppointmentDatabase
 {
     public class DatabaseConnection : Connection
@@ -21,6 +22,7 @@ namespace AppointmentDatabase
 
                     while (reader.Read())
                     {
+                        user.UserId = (int)reader["UserId"];
                         user.FirstName = (string)reader["FirstName"];
                         user.LastName = (string)reader["LastName"];
                         user.EmailID = (string)reader["EmailID"];
@@ -91,13 +93,37 @@ namespace AppointmentDatabase
 
             }
         }
-        public List<String> getGuestUsersList(String HostUserName)
+
+        public List<DbAppointmentInfo> CurrentAppointment(int UserId)
         {
-            List<string> UserList = new List<string>();
-            using (SqlCommand cmd=new SqlCommand("GUEST_USERLIST", mConnection))
+            List <DbAppointmentInfo> TodayAppList = new List<DbAppointmentInfo>();
+            using (SqlCommand cmd = new SqlCommand("CurrentDateAppointment", mConnection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("USERNAME", HostUserName));
+                cmd.Parameters.Add(new SqlParameter("USER_ID",UserId));
+                using(SqlDataReader reader=cmd.ExecuteReader())
+                {
+                    TodayAppList.Add(new DbAppointmentInfo
+                    {
+                        AppointmentID = (int)reader[0],
+                        HostUser = (string)reader[1],
+                        GuestUser = (string)reader[2],
+                        DatenTime = (DateTime)reader[3],
+                        Subject = (string)reader[4]
+                    });
+                }
+            }
+            return TodayAppList;
+
+        }
+
+
+        public List<String> getUsersList()
+        {
+            List<string> UserList = new List<string>();
+            using (SqlCommand cmd=new SqlCommand("USERLIST", mConnection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {    
                     while (reader.Read())
@@ -109,5 +135,6 @@ namespace AppointmentDatabase
             }
             return UserList;
         }
+
     }
 }

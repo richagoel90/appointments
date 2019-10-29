@@ -3,15 +3,23 @@
     ViewBag.Title = "My Account";
 }
 <link rel="stylesheet" type="text/css" href="~/Content/Main.css">
+<script type="text/javascript">s
+    function TodayData() {
+
+    }
+</script>
 @using AppointmentScheduler.Models
 @model AppointmentScheduler.Models.UserInfo
 <h1>@ViewBag.Title</h1>
 
 <span class="tablestyle">
-        <button>@Html.ActionLink("Today", "CurrentAppointment", "Home")</button>
+        <button onclick="TodayData()">@Html.ActionLink("Today", "CurrentAppointment", "Home")</button>
         <button>@Html.ActionLink("Request Appointment", "RequestAppointment", "Home")</button>
         <button>@Html.ActionLink("Request Status", "RequestStatus", "Home")</button>
         <button>@Html.ActionLink("View Calender", "Calender", "Home")</button>
 </span>
+<body>
+    @RenderBody();
+</body>
 
  

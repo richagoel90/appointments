@@ -101,7 +101,7 @@ namespace AppointmentScheduler.Controllers
                 {
                     output = Crypto.VerifyHashedPassword(resultuser.Password, user.Password);
                 }
-                catch(Exception e)
+                catch
                 {
                     output = false;
                 }
@@ -109,6 +109,7 @@ namespace AppointmentScheduler.Controllers
                 {
                     UserInfo userModel = new UserInfo()
                     {
+                        UserId = resultuser.UserId,
                         FirstName = resultuser.FirstName,
                         LastName = resultuser.LastName,
                         EmailID = resultuser.EmailID,
@@ -116,12 +117,6 @@ namespace AppointmentScheduler.Controllers
                         UserName = resultuser.UserName,
                         Password = resultuser.Password
                     };
-
-                    ////HttpCookie cookie = new HttpCookie("Login");
-                    //cookie["UserName"] = user.UserName;
-                    //cookie["FirstName"] = user.FirstName;
-                    //cookie.Expires.Add(new TimeSpan(1, 0, 0));
-                    //Response.Cookies.Add(cookie);
                     Session["User"] = userModel;
                     return RedirectToAction("UserAccount");
                 }
@@ -134,20 +129,7 @@ namespace AppointmentScheduler.Controllers
             return View();
             
         }
-
-        [HttpGet]
-        public ActionResult UserAccount()
-        {
-            UserInfo user = GetLoggedInUser();
-            if (user != null)
-            {
-                return View(user);
-            }
-            else
-            {
-                return RedirectToAction("Index");
-            }            
-        }  
+  
         [HttpGet]
         public ActionResult ForgetPassword()
         {
@@ -171,7 +153,7 @@ namespace AppointmentScheduler.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty,"Password has not been changed");
+                    ModelState.AddModelError("CustomError","Password has not been changed");
                     return View();
                 }
             }
@@ -190,9 +172,23 @@ namespace AppointmentScheduler.Controllers
             UserInfo user = GetLoggedInUser();
             if (user != null)
             {
-                List<string> UserList = new List<string>();
                 DatabaseConnection dbConnect = new DatabaseConnection();
+                List<string> UserList = dbConnect.getUsersList();
+                UserList.Remove(String.Concat(user.FirstName, ',', user.LastName));
+                return View("RequestAppointment",UserList);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
 
+        [HttpGet]
+        public ActionResult UserAccount()
+        {
+            UserInfo user = GetLoggedInUser();
+            if (user != null)
+            {
                 return View(user);
             }
             else
@@ -200,44 +196,38 @@ namespace AppointmentScheduler.Controllers
                 return RedirectToAction("Index");
             }
         }
-        //[HttpGet]
-        //public ActionResult GoogleOAuth()
-        //{
-        //    GoogleOAuthAPICall gAuth = new GoogleOAuthAPICall();
-        //    gAuth.code = Request.QueryString["code"];
-        //    return V);
-        //}
-        //[HttpPost]
-        //public ActionResult GoogleOAuth()
-        //{
-        //    return RedirectToAction("Login");
-        //}
+        [HttpGet]
+        public ActionResult CurrentAppointment()
+        {
+            UserInfo user = GetLoggedInUser();
+            if (user != null)
+            {
+                DatabaseConnection dbconnect = new DatabaseConnection();
+                List<DbAppointmentInfo> result = dbconnect.CurrentAppointment(user.UserId);
+                AllAppointments allAppoint = new AllAppointments();
 
+                foreach (var value in result)
+                {
+                    
+                    allAppoint.Appointment.Add(new AppointmentInfo
+                    {
+                        HostUser = value.HostUser,
+                        GuestUser = value.GuestUser,
+                        DatenTime = value.DatenTime,
+                        Subject = value.Subject
+                    });
+                }
+                
+                return View("CurrentAppointment",allAppoint);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
         private UserInfo GetLoggedInUser()
         {
             return Session["User"] as UserInfo;
         }
     }
 }
-/*List<UserData> Result = new List<UserData>();
-            string Command = "SELECT * from Users";
-            using (SqlConnection mConnection = new SqlConnection(connectionString))
-            {
-                mConnection.Open();
-                using (SqlCommand cmd = new SqlCommand(Command, mConnection))
-                {
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            UserData user = new UserData();
-                            user.UserId = (long)reader["UserId"];
-                            user.UserName = (string)reader["UserName"];
-                            user.FirstName = (string)reader["FirstName"];
-                            Result.Add(user);
-                        }
-                    }
-                }
-            }
-            return View("AllUsers", new AllUsers() { Users = Result });
-            */

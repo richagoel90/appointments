@@ -2,14 +2,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Request Appointment";
 }
-<link rel="javascript" type="text/javascript" href="~/Scripts/Appointment.js"/>
+<link rel="javascript" type="text/javascript" href="~/Scripts/Appointment.js" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#<%=TextBox1.ClientID %>").dynDateTime({
+            showsTime: true,
+            ifFormat: "%Y/%m/%d %H:%M",
+            daFormat: "%l;%M %p, %e %m, %Y",
+            align: "BR",
+            electric: false,
+            singleClick: false,
+            displayArea: ".siblings('.dtcDisplayArea')",
+            button: ".next()"
+        });
+    });
+</script>
 <h1>@ViewBag.Title</h1>
 
 @model AppointmentScheduler.Models.AppointmentInfo
 
-@*@using(Html.BeginForm("RequestAppointment","RequestAppointment",FormMethod.Post))
+@using (Html.BeginForm("RequestAppointment", "RequestAppointment", FormMethod.Post))
 {
-    @Html.Label("User:");
-    @Html.DropDownList("GuestUser", new SelectList(), "Select User");
-}*@
+    @Html.Label("Select Guest User:");
+    @Html.DropDownListFor(m=>m.GuestUser,
+    new SelectList(dbConnect
+    , "Select User");
+
+    @Html.Label("Select Date and Time:");
+    @Html.TextBox("DatenTime");
+
+}
 

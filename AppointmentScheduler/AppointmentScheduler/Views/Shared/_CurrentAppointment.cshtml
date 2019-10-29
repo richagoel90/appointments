@@ -1,0 +1,10 @@
+﻿@model AppointmentScheduler.Models.AllAppointments
+@Html.Label<"Your Today's Appointments:");
+
+@foreach (var appointment in Model.A)
+{
+    @:HostUser:@appointment.HostUser;
+    @:GuestUser:@appointment.GuestUser;
+    @:Subject:@appointment.Subject;
+    @:Date and Time:@appointment.DatenTime;
+}

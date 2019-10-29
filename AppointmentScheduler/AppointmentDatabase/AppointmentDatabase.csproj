@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbAppointmentInfo.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="DatabaseConnection.cs" />
     <Compile Include="DbUsers.cs" />
